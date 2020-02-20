@@ -1,12 +1,20 @@
 ﻿using System;
+using System.IO;
+using Compiler.Lexer;
 
-namespace compiler
+namespace Compiler
 {
     class Program
     {
-        static void Main(string[] args)
+        private static string _sourceCodeFileName = "../compiler-tests/main.lsd";
+
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            TextReader sourceCodeFile = new StreamReader(_sourceCodeFileName);
+            Compiler.Lexer.Lexer lexer  = new Compiler.Lexer.Lexer(sourceCodeFile);
+            var lexem = lexer.NextLexem();
+            while (lexem != null) { Console.Write(lexem.Value); Console.WriteLine(lexem.Type); lexem = lexer.NextLexem(); }
+
         }
     }
 }
