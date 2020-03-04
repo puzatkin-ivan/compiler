@@ -31,7 +31,7 @@ namespace Compiler.Lexer
         {
             int rowPosition = 1;
             string line = _textReader.ReadLine();
-            
+
             while (line != null)
             {
                 ProcessSourceLine(_lexems, line, rowPosition);
@@ -68,6 +68,8 @@ namespace Compiler.Lexer
                 {
                     wordBuilder.Append( letter );
                 }
+                Console.WriteLine(charNumber);
+                Console.WriteLine(line.Length);
             }
 
             word = wordBuilder.ToString();
@@ -94,15 +96,18 @@ namespace Compiler.Lexer
             }
             lexemBuilder.Append(line[index]);
 
-            offset = index;
             string lexem = lexemBuilder.ToString();
+
+            offset = lexem.Length - 1;
+            Console.WriteLine(lexem);
+            Console.WriteLine(lexem.Length);
 
             return new Lexem(lexem, rowPosition);
         }
 
         private void AddTermInQueue( Queue<Lexem> queue, Lexem term )
         {
-            if (term != null)
+            if (term != null && term.Length() != 0)
             {
                 queue.Enqueue(term);
             }

@@ -17,5 +17,10 @@ namespace Compiler.Lexer
             RowPosition = rowPosition;
             Type = TermRecognizer.GetTypeByTermString( lexem );
         }
+
+        public int Length()
+        {
+            return Value.Length;
+        }
     }
 }
