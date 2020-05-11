@@ -68,8 +68,6 @@ namespace Compiler.Lexer
                 {
                     wordBuilder.Append( letter );
                 }
-                Console.WriteLine(charNumber);
-                Console.WriteLine(line.Length);
             }
 
             word = wordBuilder.ToString();
@@ -99,8 +97,6 @@ namespace Compiler.Lexer
             string lexem = lexemBuilder.ToString();
 
             offset = lexem.Length - 1;
-            Console.WriteLine(lexem);
-            Console.WriteLine(lexem.Length);
 
             return new Lexem(lexem, rowPosition);
         }

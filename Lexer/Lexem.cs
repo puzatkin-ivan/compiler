@@ -18,6 +18,13 @@ namespace Compiler.Lexer
             Type = TermRecognizer.GetTypeByTermString( lexem );
         }
 
+        public Lexem(TermType type, int rowPosition)
+        {
+            Value = "";
+            RowPosition = rowPosition;
+            Type = type;
+        }
+
         public int Length()
         {
             return Value.Length;
