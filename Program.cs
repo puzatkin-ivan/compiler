@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using compiler.Syntaxer;
+using Compiler.Syntaxer;
 using Compiler.Lexer;
 
 namespace Compiler
@@ -11,7 +11,11 @@ namespace Compiler
 
         public static void Main(string[] args)
         {
-            Grammar grammar = new Grammar("A\' -> A\nA -> a A\nA -> a");
+            GrammarStream stream = new GrammarStream(new StreamReader("../compiler-tests/syntax.test.lang"));
+            Console.WriteLine(stream.GetGrammarText());
+            Grammar grammar = new Grammar(stream.GetGrammarText());
+            SyntaxAnalyzer analyzer = new SyntaxAnalyzer(stream);
+            analyzer.Analyze();
         }
 
         private static void ReadSourceCode()

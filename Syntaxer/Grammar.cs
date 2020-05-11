@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace compiler.Syntaxer
+namespace Compiler.Syntaxer
 {
     public class Grammar
     {
@@ -13,10 +13,10 @@ namespace compiler.Syntaxer
         private string _axiom;
         private readonly ISet<string> _alphabet;
         private readonly ISet<string> _nonTerminals;
-        private readonly ISet<string> _terminals;
+        public ISet<string> _terminals { get; private set; }
 
-        private Dictionary<string, ISet<string>> _firsts;
-        private Dictionary<string, ISet<string>> _follows;
+        public Dictionary<string, ISet<string>> _firsts;
+        public Dictionary<string, ISet<string>> _follows;
 
         public Grammar(string lang)
         {
@@ -36,12 +36,17 @@ namespace compiler.Syntaxer
         
         public List<Rule> GetRulesForNonterminalByDotIndex(Rule rule, int dotIndex)
         {
+            if (dotIndex >= rule.Development.Length)
+            {
+                return new List<Rule>();
+            }
+
             var nonterminal = rule.Development[dotIndex];
 
             var result = new List<Rule>();
-            foreach (Rule _rule in Rules)
+            foreach (Rule l_rule in Rules)
             {
-                if (nonterminal == _rule.NonTerminal)
+                if (nonterminal == l_rule.NonTerminal)
                 {
                     result.Add(rule);
                 }

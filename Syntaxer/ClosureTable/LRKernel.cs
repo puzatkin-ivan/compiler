@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace compiler.Syntaxer
+namespace Compiler.Syntaxer.ClosureTable
 {
     public class LRKernel
     {
@@ -19,6 +19,11 @@ namespace compiler.Syntaxer
             Closure = items; // maybe in these parts must be magic js: items.slice(0);
             Gotos = new Dictionary<string, int>();
             Keys = new List<string>();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         public override bool Equals(object obj)

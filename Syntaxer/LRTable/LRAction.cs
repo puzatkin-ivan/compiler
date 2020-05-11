@@ -1,4 +1,4 @@
-namespace compiler.Syntaxer.LRTable
+namespace Compiler.Syntaxer.Table
 {
     public class LRAction
     {

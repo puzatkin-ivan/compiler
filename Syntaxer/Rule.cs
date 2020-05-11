@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace compiler.Syntaxer
+namespace Compiler.Syntaxer
 {
     public class Rule
     {
@@ -41,7 +41,7 @@ namespace compiler.Syntaxer
 
             Rule rhs = (Rule)obj;
             if (NonTerminal != rhs.NonTerminal
-                && Development != rhs.Development)
+                && !Development.Equals(rhs.Development))
             {
                 return false;
             }

@@ -1,24 +1,25 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace compiler.Syntaxer
+namespace Compiler.Syntaxer.ClosureTable
 {
     public class LRClosureTable
     {
         private Grammar _grammar;
-        private HashSet<LRKernel> _kernels;
+        public HashSet<LRKernel> Kernels { get; private set; }
 
         public LRClosureTable(Grammar grammar)
         {
             _grammar = grammar;
-            _kernels = new HashSet<LRKernel>();
+            Kernels = new HashSet<LRKernel>();
 
             var firstKernelItem = new LRKernelItem(_grammar, grammar.Rules.First(), 0);
-            _kernels.Add(new LRKernel(0, new List<LRKernelItem>(){ firstKernelItem }));
+            Kernels.Add(new LRKernel(0, new List<LRKernelItem>(){ firstKernelItem }));
 
-            for (int index = 0; index < _kernels.Count;)
+            for (int index = 0; index < Kernels.Count;)
             {
-                var kernelList = _kernels.ToList();
+                var kernelList = Kernels.ToList();
                 var kernel = kernelList[index];
 
                 UpdateClosure(kernel);
@@ -29,19 +30,28 @@ namespace compiler.Syntaxer
 
         private void UpdateClosure(LRKernel kernel)
         {
-            foreach (LRKernelItem closure in kernel.Closure)
+            if (kernel.Closure.Count == 0)
             {
+                throw new System.Exception("Rule has not right part.");
+            }
+
+            int gindex = 0;
+            do
+            {
+                var closure = kernel.Closure[gindex];
+
                 List<LRKernelItem> newItemsFromSymbolAfterDot = closure.NewItemsFromSymbolAfterDot();
 
                 foreach (LRKernelItem item in newItemsFromSymbolAfterDot)
                 {
-                    int index = kernel.Closure.FindIndex(lhs => lhs.Equals(item));
+                    var index = kernel.Closure.FindIndex(item.Equals);
                     if (index < 0)
                     {
                         kernel.Closure.Add(item);
                     }
                 }
-            }
+                ++gindex;
+            } while (gindex < kernel.Closure.Count);
         }
 
         private bool AddGotos(LRKernel kernel)
@@ -51,7 +61,7 @@ namespace compiler.Syntaxer
 
             foreach (LRKernelItem item in kernel.Closure)
             {
-                LRKernelItem newItem = item.NewItemAfterShift();  
+                LRKernelItem newItem = item.NewItemAfterShift();
 
                 if (newItem != null)
                 {
@@ -71,16 +81,16 @@ namespace compiler.Syntaxer
                 }
             }
 
-            var kernels = _kernels.ToList();
+            var kernels = Kernels.ToList();
             foreach (string key in kernel.Keys)
             {
-                var newKernel = new LRKernel(_kernels.Count, newKernels[key].ToList());
+                var newKernel = new LRKernel(Kernels.Count, newKernels[key].ToList());
                 var targetKernelIndex = kernels.FindIndex(lhs => lhs.Equals(newKernel));
 
                 if (targetKernelIndex < 0)
                 {
-                    _kernels.Add(newKernel);
-                    kernels = _kernels.ToList();
+                    Kernels.Add(newKernel);
+                    kernels = Kernels.ToList();
                     targetKernelIndex = newKernel.Index;
                 }
                 else

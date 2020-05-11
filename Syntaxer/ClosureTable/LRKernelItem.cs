@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace compiler.Syntaxer
+namespace Compiler.Syntaxer.ClosureTable
 {
     public class LRKernelItem
     {
@@ -10,12 +11,14 @@ namespace compiler.Syntaxer
         public Rule Rule { get; private set; }
         public int DotIndex { get; private set; }
         private Grammar _grammar;
+        public ISet<string> LookAheads { get; private set; }
         
         public LRKernelItem(Grammar grammar, Rule rule, int dotIndex)
         {
             _grammar = grammar;
             Rule = rule;
             DotIndex = dotIndex;
+            LookAheads = _grammar._follows[rule.NonTerminal];
         }
 
         public List<LRKernelItem> NewItemsFromSymbolAfterDot()
@@ -27,7 +30,8 @@ namespace compiler.Syntaxer
             foreach (var rule in nonterminalRules)
             {
                 LRKernelItem newItem = new LRKernelItem(_grammar, rule, 0);
-                int index = result.FindIndex(item => item.Equals(newItem));
+
+                int index = result.FindIndex(newItem.Equals);
                 if (index < 0)
                 {
                     result.Add(newItem);
@@ -67,6 +71,11 @@ namespace compiler.Syntaxer
             }
             
             return Rule.NonTerminal + " -> " + developmentConvertedToString + "." ;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }
