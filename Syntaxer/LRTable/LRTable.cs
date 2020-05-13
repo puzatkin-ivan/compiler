@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Compiler.Syntaxer.ClosureTable;
 
@@ -14,10 +15,12 @@ namespace Compiler.Syntaxer.Table
         {
             Grammar = grammar;
             ClosureTable = closureTable;
+            States = new List<LRState>();
 
             foreach (LRKernel kernel in ClosureTable.Kernels)
             {
                 var state = new LRState();
+                States.Add(state);
 
                 foreach(string key in kernel.Keys)
                 {
@@ -25,12 +28,20 @@ namespace Compiler.Syntaxer.Table
 
                     string actionType = Grammar._terminals.Contains(key) ? "s" : "";
                     LRAction newAction = new LRAction(actionType, nextStateIndex);
-                    state.Actions.Add(key, newAction);
+                    if (!state.Actions.ContainsKey(key))
+                    {
+                        state.Actions.Add(key, newAction);
+                    }
+                    else
+                    {
+                        state.Actions[key] = newAction;
+                    }
+                    
                 }
 
                 foreach (LRKernelItem closure in kernel.Closure)
                 {
-                    if (closure.DotIndex == closure.Rule.Development.Length || closure.Rule.Development[0] != Epsilon)
+                    if (closure.DotIndex == closure.Rule.Development.Length || closure.Rule.Development[0] == Epsilon)
                     {
                         foreach (string lookAhead in closure.LookAheads)
                         {

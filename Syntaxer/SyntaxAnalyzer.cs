@@ -19,13 +19,15 @@ namespace Compiler.Syntaxer
         {
             _grammarStream = grammarStream;
             _grammar = new Grammar(_grammarStream.GetGrammarText());
+            Console.WriteLine("Success readed grammar");
             _lrClosureTable = new LRClosureTable(_grammar);
+            Console.WriteLine("Success created closure table");
             _lrTable = new LRTable(_grammar, _lrClosureTable);
+            Console.WriteLine("Success create lr-table");
         }
 
         public void Analyze()
         {
-            
         }
     }
 }

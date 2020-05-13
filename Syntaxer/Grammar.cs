@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Compiler.Syntaxer
 {
@@ -12,7 +13,7 @@ namespace Compiler.Syntaxer
         private readonly string _lang;
         private string _axiom;
         private readonly ISet<string> _alphabet;
-        private readonly ISet<string> _nonTerminals;
+        public ISet<string> _nonTerminals;
         public ISet<string> _terminals { get; private set; }
 
         public Dictionary<string, ISet<string>> _firsts;
@@ -30,6 +31,7 @@ namespace Compiler.Syntaxer
 
             InitializeRulesAndAlphabetAndNonterminals();
             InitializeAlphabetAndTerminals();
+            PrintResultGrammar();
             InitializeFirsts();
             InitializeFollows();
         }
@@ -46,9 +48,9 @@ namespace Compiler.Syntaxer
             var result = new List<Rule>();
             foreach (Rule l_rule in Rules)
             {
-                if (nonterminal == l_rule.NonTerminal)
+                if (nonterminal.Equals(l_rule.NonTerminal))
                 {
-                    result.Add(rule);
+                    result.Add(l_rule);
                 }
             }
 
@@ -79,6 +81,40 @@ namespace Compiler.Syntaxer
                     _nonTerminals.Add(nonTerminal);
                 }
             }
+        }
+
+        private void PrintResultGrammar()
+        {
+            var stream = new StreamWriter("./out/grammar.md");
+
+            stream.WriteLine("Rules");
+            foreach (Rule rule in Rules)
+            {
+                stream.WriteLine(rule.Index + ") " + rule.ToString());
+            }
+
+            stream.WriteLine("Alphabet");
+            foreach (string character in _alphabet)
+            {
+                stream.Write(character + ", ");
+            }
+            stream.WriteLine();
+
+            stream.WriteLine("Nonterminals");
+            foreach (string nonTerminal in _nonTerminals)
+            {
+                stream.Write(nonTerminal + ", ");
+            }
+            stream.WriteLine();
+
+            stream.WriteLine("Terminals");
+            foreach (string terminal in _terminals)
+            {
+                stream.Write(terminal + " ");
+            }
+            stream.WriteLine();
+
+            stream.Flush();
         }
 
         private void InitializeAlphabetAndTerminals()
@@ -132,7 +168,6 @@ namespace Compiler.Syntaxer
             bool epsilonInSymbolFirsts = true;
 
             string nonTerminal = rule.NonTerminal;
-
             foreach (string symbol in rule.Development)
             {
                 epsilonInSymbolFirsts = false;
@@ -148,9 +183,13 @@ namespace Compiler.Syntaxer
                     foreach (string firstItem in _firsts[symbol])
                     {
                         epsilonInSymbolFirsts |= firstItem == Epsilon;
-
                         result |= _firsts[nonTerminal].Add(firstItem);
                     }
+                }
+
+                if (!epsilonInSymbolFirsts)
+                {
+                    break;
                 }
             }
 
@@ -158,7 +197,6 @@ namespace Compiler.Syntaxer
             {
                 result |= _firsts[nonTerminal].Add(Epsilon);
             }
-
             return result;
         }
 

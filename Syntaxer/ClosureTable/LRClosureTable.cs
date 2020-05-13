@@ -17,7 +17,8 @@ namespace Compiler.Syntaxer.ClosureTable
             var firstKernelItem = new LRKernelItem(_grammar, grammar.Rules.First(), 0);
             Kernels.Add(new LRKernel(0, new List<LRKernelItem>(){ firstKernelItem }));
 
-            for (int index = 0; index < Kernels.Count;)
+            int index = 0;
+            while (index < Kernels.Count)
             {
                 var kernelList = Kernels.ToList();
                 var kernel = kernelList[index];
@@ -36,7 +37,7 @@ namespace Compiler.Syntaxer.ClosureTable
             }
 
             int gindex = 0;
-            do
+            while (gindex < kernel.Closure.Count)
             {
                 var closure = kernel.Closure[gindex];
 
@@ -51,7 +52,7 @@ namespace Compiler.Syntaxer.ClosureTable
                     }
                 }
                 ++gindex;
-            } while (gindex < kernel.Closure.Count);
+            };
         }
 
         private bool AddGotos(LRKernel kernel)
@@ -67,7 +68,7 @@ namespace Compiler.Syntaxer.ClosureTable
                 {
                     string symbolAfterDot = item.Rule.Development[item.DotIndex];
 
-                    int keyIndex = kernel.Keys.FindIndex(lhs => lhs.Equals(symbolAfterDot));
+                    int keyIndex = kernel.Keys.FindIndex(symbolAfterDot.Equals);
                     if (keyIndex < 0)
                     {
                         kernel.Keys.Add(symbolAfterDot);   
@@ -77,7 +78,11 @@ namespace Compiler.Syntaxer.ClosureTable
                     {
                         newKernels.Add(symbolAfterDot, new HashSet<LRKernelItem>());
                     }
-                    newKernels[symbolAfterDot].Add(newItem);
+
+                    if (!newKernels[symbolAfterDot].ToList().Contains(newItem))
+                    {
+                        newKernels[symbolAfterDot].Add(newItem);
+                    }
                 }
             }
 
@@ -85,12 +90,11 @@ namespace Compiler.Syntaxer.ClosureTable
             foreach (string key in kernel.Keys)
             {
                 var newKernel = new LRKernel(Kernels.Count, newKernels[key].ToList());
-                var targetKernelIndex = kernels.FindIndex(lhs => lhs.Equals(newKernel));
 
+                var targetKernelIndex = kernels.FindIndex(newKernel.Equals);
                 if (targetKernelIndex < 0)
                 {
                     Kernels.Add(newKernel);
-                    kernels = Kernels.ToList();
                     targetKernelIndex = newKernel.Index;
                 }
                 else
@@ -98,16 +102,16 @@ namespace Compiler.Syntaxer.ClosureTable
                     foreach (var item in newKernel.Items)
                     {
                         var targetItems = kernels[targetKernelIndex].Items;
+                        lookAheadsPropagated |= !targetItems.Contains(item);
                         if (!targetItems.Contains(item))
                         {
-                            targetItems.Add(item);
+                            kernels[targetKernelIndex].Items.Add(item);
                         }
-
-                        lookAheadsPropagated |= false;
                     }
                 }
 
                 kernel.Gotos[key] = targetKernelIndex;
+                kernels = Kernels.ToList();
             }
 
             return lookAheadsPropagated;

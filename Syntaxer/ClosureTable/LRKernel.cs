@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -16,7 +17,7 @@ namespace Compiler.Syntaxer.ClosureTable
         {
             Index = index;
             Items = items;
-            Closure = items; // maybe in these parts must be magic js: items.slice(0);
+            Closure = new List<LRKernelItem>(items); // maybe in these parts must be magic js: items.slice(0);
             Gotos = new Dictionary<string, int>();
             Keys = new List<string>();
         }
@@ -57,12 +58,23 @@ namespace Compiler.Syntaxer.ClosureTable
 
         private int IndexOfUsingEquals(LRKernelItem first, List<LRKernelItem> rhs)
         {
-            return rhs.FindIndex(source => source.Equals(first));
+            return rhs.FindIndex(first.Equals);
         }
 
         public override string ToString()
         {
-            return $@"closure { Items } = { Closure } ";
+            string result = "";
+            foreach (var item in Items)
+            {
+                result += item.ToString() + " ";
+            }
+
+            string resultClosure = "";
+            foreach (var closure in Closure)
+            {
+                resultClosure += closure.ToString() + " ";
+            }
+            return "Closure { " + result + "} = { " + resultClosure + "}" ;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Compiler.Syntaxer.ClosureTable
         }
 
         public LRKernelItem NewItemAfterShift()
-        {
+        {            
             if (DotIndex < Rule.Development.Length && Rule.Development[DotIndex] != Epsilon)
             {
                 return new LRKernelItem(_grammar, Rule, DotIndex + 1); 
@@ -59,7 +59,7 @@ namespace Compiler.Syntaxer.ClosureTable
             }
 
             var rhs = (LRKernelItem) obj;
-            return Rule.Equals(rhs.Rule) && DotIndex == rhs.DotIndex;
+            return Rule.Equals(rhs.Rule) && DotIndex.Equals(rhs.DotIndex);
         }
 
         public override string ToString()
@@ -69,8 +69,17 @@ namespace Compiler.Syntaxer.ClosureTable
             {
                 developmentConvertedToString += Rule.Development[index] + " ";
             }
+
+            string afterDevelopmentConvertedToString = "";
+            if (!Array.Exists(Rule.Development, lhs => lhs.Equals(Epsilon)))
+            {
+                for (int index = DotIndex; index < Rule.Development.Length; ++index)
+                {
+                    afterDevelopmentConvertedToString += Rule.Development[index] + " ";
+                }
+            }
             
-            return Rule.NonTerminal + " -> " + developmentConvertedToString + "." ;
+            return Rule.NonTerminal + " -> " + developmentConvertedToString + "." + afterDevelopmentConvertedToString;
         }
 
         public override int GetHashCode()

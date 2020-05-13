@@ -40,10 +40,22 @@ namespace Compiler.Syntaxer
             }
 
             Rule rhs = (Rule)obj;
-            if (NonTerminal != rhs.NonTerminal
-                && !Development.Equals(rhs.Development))
+            if (NonTerminal != rhs.NonTerminal)
             {
                 return false;
+            }
+
+            if (Development.Length != rhs.Development.Length)
+            {
+                return false;
+            }
+
+            foreach (string symbol in Development)
+            {
+                if (!Array.Exists(rhs.Development, symbol.Equals))
+                {
+                    return false;
+                }
             }
 
             return true;
