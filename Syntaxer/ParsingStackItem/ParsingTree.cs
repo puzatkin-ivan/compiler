@@ -33,6 +33,7 @@ namespace compiler.Syntaxer.ParsingStackItem
                 } 
             }
         }
+
         public override string ToString()
         {
             return ToString("");
@@ -42,7 +43,6 @@ namespace compiler.Syntaxer.ParsingStackItem
         {
             string result = prefix + "- " + NonTerminal + "\n";
 
-            Console.WriteLine(GetType() + ": " + ChildNodes.Count);
             prefix += "  ";
             if (ChildNodes.Count > 0)
             {

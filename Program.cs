@@ -6,6 +6,7 @@ using Compiler.Syntaxer.ClosureTable;
 using Compiler.Syntaxer.Table;
 using Compiler.LexerAnalyzer;
 using compiler.Syntaxer.ParsingStackItem;
+using compiler.Syntaxer.SyntaxTree;
 
 namespace Compiler
 {
@@ -29,11 +30,11 @@ namespace Compiler
             }
 
             SyntaxAnalyzer analyzer = new SyntaxAnalyzer(stream);
-            ParsingTree tree = analyzer.Analyze(lexer, true, writer);
+            ASTree tree = analyzer.Analyze(lexer, debug, writer);
 
             if (debug)
             {
-                writer.WriteLine("### Stack Trace");
+                writer.WriteLine("### Ast Tree");
                 writer.WriteLine(tree.ToString());
                 writer.Flush();
             }

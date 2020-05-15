@@ -7,6 +7,7 @@ using Compiler.LexerAnalyzer;
 using System;
 using System.Collections.Generic;
 using compiler.Syntaxer.ParsingStackItem;
+using compiler.Syntaxer.SyntaxTree;
 
 namespace Compiler.Syntaxer
 {
@@ -26,7 +27,7 @@ namespace Compiler.Syntaxer
             _lrTable = new LRTable(_grammar, _lrClosureTable);
         }
 
-        public ParsingTree Analyze(Lexer lexer, bool debug, TextWriter writer)
+        public ASTree Analyze(Lexer lexer, bool debug, TextWriter writer)
         {
             if (debug)
             {
@@ -82,7 +83,7 @@ namespace Compiler.Syntaxer
                 }
             }
 
-            return stack[1].NonTerminal;
+            return new AstParser().Parse(stack[1].NonTerminal);
         }
 
         private void PrintStackTraceHeader(TextWriter writer)
