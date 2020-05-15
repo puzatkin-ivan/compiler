@@ -4,27 +4,28 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Compiler.Lexer.Enums;
+using Compiler.LexerAnalyzer.Enums;
 
-namespace Compiler.Lexer
+namespace Compiler.LexerAnalyzer
 {
     public class Lexer
     {
+        public int LexemCount { get; private set; }
         private TextReader _textReader;
 
-        private Queue<Lexem> _lexems = new Queue<Lexem>();
+        private List<Lexem> _lexems = new List<Lexem>();
 
         public Lexer( TextReader textReader )
         {
             _textReader = textReader;
 
             ReadAllLexemInQueue();
+            LexemCount = _lexems.Count;
         }
 
-        public Lexem NextLexem()
+        public Lexem NextLexem(int tokenIndex)
         {
-            Lexem lexem;
-            return _lexems.TryDequeue(out lexem) ? lexem : null;
+            return _lexems[tokenIndex];
         }
 
         private void ReadAllLexemInQueue()
@@ -38,9 +39,11 @@ namespace Compiler.Lexer
                 rowPosition++;
                 line = _textReader.ReadLine();
             }
+
+            AddTermInQueue(_lexems, new Lexem("$", ++rowPosition));
         }
 
-        private void ProcessSourceLine(Queue<Lexem> lexemStack, string line, int rowPosition )
+        private void ProcessSourceLine(List<Lexem> lexemStack, string line, int rowPosition )
         {
             var wordBuilder = new StringBuilder();
 
@@ -101,11 +104,11 @@ namespace Compiler.Lexer
             return new Lexem(lexem, rowPosition);
         }
 
-        private void AddTermInQueue( Queue<Lexem> queue, Lexem term )
+        private void AddTermInQueue( List<Lexem> queue, Lexem term )
         {
             if (term != null && term.Length() != 0)
             {
-                queue.Enqueue(term);
+                queue.Add(term);
             }
         }
 

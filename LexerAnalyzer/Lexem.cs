@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Compiler.Lexer.Enums;
+using Compiler.LexerAnalyzer.Enums;
 
-namespace Compiler.Lexer
+namespace Compiler.LexerAnalyzer
 {
     public class Lexem
     {
@@ -28,6 +28,11 @@ namespace Compiler.Lexer
         public int Length()
         {
             return Value.Length;
+        }
+
+        public override string ToString()
+        {
+            return Value;
         }
     }
 }

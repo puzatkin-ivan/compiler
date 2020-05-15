@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Compiler.Lexer.Enums;
+using Compiler.LexerAnalyzer.Enums;
 
-namespace Compiler.Lexer
+namespace Compiler.LexerAnalyzer
 {
     public class TermRecognizer
     {
@@ -70,15 +70,16 @@ namespace Compiler.Lexer
              { "Array", TermType.Array },
              { "IntArray", TermType.IntArray },
              { "div", TermType.Division },
-             { "Echo", TermType.Echo },
-             { "Echoln", TermType.Echoln },
+             { "echo", TermType.Echo },
+             { "echoln", TermType.Echoln },
             { "&&", TermType.And },
             { "||", TermType.Or },
             { "==", TermType.Equal },
             { "!=", TermType.NotEqual },
             { ">=", TermType.MoreEqual },
             { "<=", TermType.LessEqual },
-            { "|", TermType.BExp }
+            { "|", TermType.BExp },
+            {"$", TermType.Epsilon},
         };
 
         public static readonly Dictionary<string, TermType> DelimeterTypeByString = new Dictionary<string, TermType>

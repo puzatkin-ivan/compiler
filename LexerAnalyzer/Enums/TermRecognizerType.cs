@@ -1,4 +1,4 @@
-﻿namespace Compiler.Lexer.Enums
+﻿namespace Compiler.LexerAnalyzer.Enums
 {
     public enum CommentState
     {
