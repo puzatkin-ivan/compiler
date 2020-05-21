@@ -14,7 +14,7 @@ namespace Compiler
 {
     class Program
     {
-        private static string _sourceCodeFileName = "../compiler-tests/main.test.lsd";
+        private static string _sourceCodeFileName = "./source/main.test.lsd";
         private static string _outViewFileName = "./out/syntax_analyzer.md"; 
 
         public static void Main(string[] args)
@@ -22,7 +22,7 @@ namespace Compiler
             
             TextReader sourceCodeFile = new StreamReader(_sourceCodeFileName);
             Lexer lexer  = new Lexer(sourceCodeFile);
-            GrammarStream stream = new GrammarStream(new StreamReader("../compiler-tests/syntax.test.lang"));
+            GrammarStream stream = new GrammarStream(new StreamReader("./source/syntax.test.lang"));
             TextWriter writer = new StreamWriter(_outViewFileName);
 
             bool debug = args.Length == 1 && args[0] == "--debug";
