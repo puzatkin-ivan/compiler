@@ -17,11 +17,17 @@ namespace compiler.ILGenerator
             { AstTypeEnum.Echoln, "call void [mscorlib]System.Console::WriteLine({TYPE})"},
         };
 
-        public void Generate(TextWriter ilsourceFile, ASTree tree)
+        public void Generate(TextWriter ilsourceFile, List<ASTree> trees)
         {
             string result = GetHeaderConstructions();
 
-            ilsourceFile.WriteLine(result.Replace("{BODY}", GenerateIlFromAst(tree)));
+            string body = "";
+            foreach (var tree in trees)
+            {
+                body += GenerateIlFromAst(tree);
+            }
+
+            ilsourceFile.WriteLine(result.Replace("{BODY}", body));
             ilsourceFile.Flush();
         }
 

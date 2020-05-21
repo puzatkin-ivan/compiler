@@ -8,6 +8,7 @@ using Compiler.LexerAnalyzer;
 using compiler.Syntaxer.ParsingStackItem;
 using compiler.Syntaxer.SyntaxTree;
 using compiler.ILGenerator;
+using System.Collections.Generic;
 
 namespace Compiler
 {
@@ -31,17 +32,25 @@ namespace Compiler
             }
 
             SyntaxAnalyzer analyzer = new SyntaxAnalyzer(stream);
-            ASTree tree = analyzer.Analyze(lexer, debug, writer);
+
+            List<ASTree> astTrees = new List<ASTree>();
+            for (int index = 0; index < lexer.LexemCount; ++index)
+            {
+               astTrees.Add(analyzer.Analyze(lexer, index, debug, writer));
+            }
 
             if (debug)
             {
                 writer.WriteLine("### Ast Tree");
-                writer.WriteLine(tree.ToString());
+                foreach (var tree in astTrees)
+                {
+                    writer.WriteLine(tree.ToString());
+                }
                 writer.Flush();
             }
 
             MSILGenerator generator = new MSILGenerator();
-            generator.Generate(new StreamWriter("./out/lsdlang.il"), tree);
+            generator.Generate(new StreamWriter("./out/lsdlang.il"), astTrees);
 
         }
 

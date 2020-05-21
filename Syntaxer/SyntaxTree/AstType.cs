@@ -11,6 +11,7 @@ namespace compiler.Syntaxer.SyntaxTree
             { TermType.DecimalWholeNumber, AstTypeEnum.Int },
             { TermType.DecimalFixedPointNumber, AstTypeEnum.Double },
             { TermType.Echo, AstTypeEnum.Echo },
+            { TermType.Echoln, AstTypeEnum.Echoln },
             { TermType.OpeningRoundBracket, AstTypeEnum.RoundBracket },
             { TermType.ClosingRoundBracket, AstTypeEnum.RoundBracket },
         };
