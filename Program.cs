@@ -7,6 +7,7 @@ using Compiler.Syntaxer.Table;
 using Compiler.LexerAnalyzer;
 using compiler.Syntaxer.ParsingStackItem;
 using compiler.Syntaxer.SyntaxTree;
+using compiler.ILGenerator;
 
 namespace Compiler
 {
@@ -38,6 +39,10 @@ namespace Compiler
                 writer.WriteLine(tree.ToString());
                 writer.Flush();
             }
+
+            MSILGenerator generator = new MSILGenerator();
+            generator.Generate(new StreamWriter("./out/lsdlang.il"), tree);
+
         }
 
         private static void ReadSourceCode()

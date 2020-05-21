@@ -9,11 +9,68 @@ namespace compiler.Syntaxer.SyntaxTree
         private static List<AstTypeEnum> AstOperators = new List<AstTypeEnum>() {
             AstTypeEnum.Multiple,
             AstTypeEnum.Plus,
+            AstTypeEnum.Echo,
+            AstTypeEnum.Echoln,
+            AstTypeEnum.RoundBracket,
         };
 
         public ASTree Parse(ParsingTree tree)
         {
-            return GenerateASTFromParsingTree(tree);
+            var astTree = GenerateASTFromParsingTree(tree);
+            ConvertTypeByAstTree(astTree);
+            return astTree;
+        }
+
+        private void ConvertTypeByAstTree(ASTree astTree)
+        {
+            ConvertTypeByAstTreeRecursive(astTree);
+        }
+
+        private AstTypeEnum ConvertTypeByAstTreeRecursive(ASTree astTree)
+        {
+            if (AstOperators.Contains(astTree.Type))
+            {
+                AstTypeEnum lhs = AstTypeEnum.Int;
+                AstTypeEnum rhs = AstTypeEnum.Int;
+
+                if (astTree.Left != null)
+                {
+                    lhs = ConvertTypeByAstTreeRecursive(astTree.Left);
+                }
+
+                if (astTree.Right != null)
+                {
+                    rhs = ConvertTypeByAstTreeRecursive(astTree.Right);
+                }
+
+                AstTypeEnum main = lhs.CompareTo(rhs) <= 0 ? rhs : lhs;
+
+                ChangeChildType(astTree, main);
+
+                return main;
+            }
+            else
+            {
+                return astTree.Type;
+            }
+        }
+
+        private void ChangeChildType(ASTree astTree, AstTypeEnum newType)
+        {
+            if (astTree.Left != null)
+            {
+                ChangeChildType(astTree.Left, newType);
+            }
+
+            if (astTree.Right != null)
+            {
+                ChangeChildType(astTree.Right, newType);
+            }
+
+            if (!AstOperators.Contains(astTree.Type))
+            {
+                astTree.Type = newType;
+            }
         }
 
         private ASTree GenerateASTFromParsingTree(Tree tree)
@@ -47,7 +104,11 @@ namespace compiler.Syntaxer.SyntaxTree
                     }
                 }
 
-                if (nodes.Count < 2)
+                if (nodes.Count == 3)
+                {
+                    operatorNode.Left = nodes[1];
+                }
+                else if (nodes.Count < 2)
                 {
                     operatorNode.Left = nodes[0];
                 }

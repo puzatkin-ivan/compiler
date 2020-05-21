@@ -9,8 +9,10 @@ namespace compiler.Syntaxer.SyntaxTree
             { TermType.Plus, AstTypeEnum.Plus },
             { TermType.Multiple, AstTypeEnum.Multiple },
             { TermType.DecimalWholeNumber, AstTypeEnum.Int },
-            { TermType.DecimalFloatingPointNumber, AstTypeEnum.Double },
-            { TermType.Echo, AstTypeEnum.Echo }
+            { TermType.DecimalFixedPointNumber, AstTypeEnum.Double },
+            { TermType.Echo, AstTypeEnum.Echo },
+            { TermType.OpeningRoundBracket, AstTypeEnum.RoundBracket },
+            { TermType.ClosingRoundBracket, AstTypeEnum.RoundBracket },
         };
         public static AstTypeEnum ConvertTermTypeToAstType(TermType type)
         {

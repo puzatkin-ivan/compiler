@@ -7,5 +7,7 @@ namespace compiler.Syntaxer.SyntaxTree
         Int,
         Double,
         Echo,
+        Echoln,
+        RoundBracket,
     }
 }
