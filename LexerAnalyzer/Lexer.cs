@@ -15,6 +15,11 @@ namespace Compiler.LexerAnalyzer
 
         private List<List<Lexem>> _lexems = new List<List<Lexem>>();
 
+        public int LexemCountByPosition(int rowPosition)
+        {
+            return _lexems[rowPosition].Count;
+        }
+
         public Lexer( TextReader textReader )
         {
             _textReader = textReader;

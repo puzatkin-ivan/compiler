@@ -103,7 +103,7 @@ namespace Compiler.Syntaxer
             }
             writer.Write(" | ");
 
-            for (int i = tokenIndex; i < lexer.LexemCount; ++i)
+            for (int i = tokenIndex; i < lexer.LexemCountByPosition(rowPosition); ++i)
             {
                 writer.Write(lexer.NextLexem(rowPosition, i) + " ");
             }
