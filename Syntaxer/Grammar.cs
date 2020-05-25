@@ -115,6 +115,7 @@ namespace Compiler.Syntaxer
             stream.WriteLine();
 
             stream.Flush();
+            stream.Close();
         }
 
         private void InitializeAlphabetAndTerminals()

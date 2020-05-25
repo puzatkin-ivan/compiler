@@ -11,6 +11,8 @@ namespace compiler.ILGenerator
         {
             { AstTypeEnum.Plus, "add" },
             { AstTypeEnum.Multiple, "mul" },
+            { AstTypeEnum.Division, "div" },
+            { AstTypeEnum.Minis, "sub" },
             { AstTypeEnum.Int, "ldc.i4 {VALUE}" },
             { AstTypeEnum.Double, "ldc.r8 {VALUE}" },
             { AstTypeEnum.Echo, "call void [mscorlib]System.Console::Write({TYPE})"},

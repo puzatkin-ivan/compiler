@@ -9,5 +9,7 @@ namespace compiler.Syntaxer.SyntaxTree
         Echo,
         Echoln,
         RoundBracket,
+        Division,
+        Minis,
     }
 }

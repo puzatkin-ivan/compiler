@@ -9,6 +9,8 @@ namespace compiler.Syntaxer.SyntaxTree
         private static List<AstTypeEnum> AstOperators = new List<AstTypeEnum>() {
             AstTypeEnum.Multiple,
             AstTypeEnum.Plus,
+            AstTypeEnum.Division,
+            AstTypeEnum.Minis,
             AstTypeEnum.Echo,
             AstTypeEnum.Echoln,
             AstTypeEnum.RoundBracket,
