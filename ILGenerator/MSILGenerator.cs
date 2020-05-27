@@ -17,6 +17,8 @@ namespace compiler.ILGenerator
             { AstTypeEnum.Double, "ldc.r8 {VALUE}" },
             { AstTypeEnum.Echo, "call void [mscorlib]System.Console::Write({TYPE})"},
             { AstTypeEnum.Echoln, "call void [mscorlib]System.Console::WriteLine({TYPE})"},
+            { AstTypeEnum.Read, "call string class [System.Console]System.Console::ReadLine()" },
+            { AstTypeEnum.String, "ldstr {VALUE}"}
         };
 
         public void Generate(TextWriter ilsourceFile, List<ASTree> trees)
@@ -38,12 +40,12 @@ namespace compiler.ILGenerator
             string result = "";
             if (tree.Left != null)
             {
-                result += GenerateIlFromAst(tree.Left) + "\n";
+                result += GenerateIlFromAst(tree.Left);
             }
 
             if (tree.Right != null)
             {
-                result += GenerateIlFromAst(tree.Right) + "\n";
+                result += GenerateIlFromAst(tree.Right);
             }
 
             if (constructions.ContainsKey(tree.Type))
@@ -51,6 +53,7 @@ namespace compiler.ILGenerator
                 result += constructions[tree.Type].Replace("{VALUE}", tree.Value).Replace("{TYPE}", tree.GetTypeConvertedIlType());
             }
 
+            result += "\n";
             return result;
         }
 

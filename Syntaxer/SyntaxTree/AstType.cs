@@ -16,6 +16,8 @@ namespace compiler.Syntaxer.SyntaxTree
             { TermType.Minis, AstTypeEnum.Minis },
             { TermType.OpeningRoundBracket, AstTypeEnum.RoundBracket },
             { TermType.ClosingRoundBracket, AstTypeEnum.RoundBracket },
+            { TermType.Read, AstTypeEnum.Read },
+            { TermType.String, AstTypeEnum.String },
         };
         public static AstTypeEnum ConvertTermTypeToAstType(TermType type)
         {

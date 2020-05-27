@@ -43,7 +43,7 @@ namespace Compiler.LexerAnalyzer
 
         public static readonly Dictionary<string, TermType> ReservedWordTypeByString = new Dictionary<string, TermType>
         {
-             { "Read", TermType.Read },
+             { "read", TermType.Read },
              { "Write", TermType.Write },
              { "public", TermType.Modificator },
              { "private", TermType.Modificator },

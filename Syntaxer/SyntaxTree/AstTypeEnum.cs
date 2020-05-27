@@ -6,10 +6,12 @@ namespace compiler.Syntaxer.SyntaxTree
         Multiple = 1,
         Int,
         Double,
+        Read,
         Echo,
         Echoln,
         RoundBracket,
         Division,
         Minis,
+        String,
     }
 }

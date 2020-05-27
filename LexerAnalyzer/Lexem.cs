@@ -32,7 +32,7 @@ namespace Compiler.LexerAnalyzer
 
         public override string ToString()
         {
-            return Value;
+            return Value + ": " + Type;
         }
     }
 }

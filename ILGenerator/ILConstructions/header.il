@@ -26,6 +26,8 @@
 {
 .entrypoint
 .maxstack 8
+nop
 {BODY}
+nop
 ret
 }

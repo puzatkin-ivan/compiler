@@ -1,4 +1,5 @@
 E' -> E
+E -> read
 E -> echo F
 E -> echoln F
 E -> E + T
@@ -11,4 +12,5 @@ F -> ( E )
 F -> - F
 F -> decimalwholenumber
 F -> decimalfixedpointnumber
+F -> string
 

@@ -61,6 +61,10 @@ namespace compiler.Syntaxer.SyntaxTree
                 case AstTypeEnum.Double:
                     main = "float64";
                     break;
+                case AstTypeEnum.String:
+                case AstTypeEnum.Read:
+                    main = "string";
+                    break;
                 default:
                     break;
             }

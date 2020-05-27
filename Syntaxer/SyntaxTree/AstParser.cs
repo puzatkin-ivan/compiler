@@ -14,6 +14,7 @@ namespace compiler.Syntaxer.SyntaxTree
             AstTypeEnum.Echo,
             AstTypeEnum.Echoln,
             AstTypeEnum.RoundBracket,
+            AstTypeEnum.Read,
         };
 
         public ASTree Parse(ParsingTree tree)
@@ -84,12 +85,12 @@ namespace compiler.Syntaxer.SyntaxTree
             else
             {
                 ParsingTree pTree = (ParsingTree)tree;
-                if (pTree.ChildNodes.Count < 2)
+                if (pTree.ChildNodes.Count == 1)
                 {
                     return GenerateASTFromParsingTree(pTree.ChildNodes[0]);
                 }
 
-                ASTree operatorNode = null;
+                List<ASTree> operatorNodes = new List<ASTree>();
                 List<ASTree> nodes = new List<ASTree>();
 
                 foreach (var child in pTree.ChildNodes)
@@ -98,7 +99,7 @@ namespace compiler.Syntaxer.SyntaxTree
 
                     if (AstOperators.Contains(newNode.Type) && newNode.Left == null && newNode.Right == null)
                     {
-                        operatorNode = newNode;
+                        operatorNodes.Add(newNode);
                     }
                     else
                     {
@@ -106,19 +107,43 @@ namespace compiler.Syntaxer.SyntaxTree
                     }
                 }
 
-                if (nodes.Count == 3)
+                ASTree operatorNode = null;
+
+                if (operatorNodes.Count == 1)
                 {
-                    operatorNode.Left = nodes[1];
+                    operatorNode = operatorNodes[0];
+                    if (nodes.Count == 3)
+                    {
+                        operatorNode.Left = nodes[1];
+                    }
+                    else if (nodes.Count == 1)
+                    {
+                        operatorNode.Left = nodes[0];
+                    }
+                    else if (nodes.Count == 2)
+                    {
+                        operatorNode.Left = nodes[0];
+                        operatorNode.Right = nodes[1];
+                    }
                 }
-                else if (nodes.Count < 2)
+                else if (operatorNodes.Count == 2)
                 {
-                    operatorNode.Left = nodes[0];
-                }
+                    operatorNode = operatorNodes[0];
+                    operatorNode.Left = operatorNodes[1];
+                    if (nodes.Count == 3)
+                    {
+                        operatorNode.Right = nodes[1];
+                    }
+                    else if (nodes.Count == 1)
+                    {
+                        operatorNode.Right = nodes[0];
+                    }
+                } 
                 else
                 {
-                    operatorNode.Left = nodes[0];
-                    operatorNode.Right = nodes[1];
+                    operatorNode = operatorNodes[1];
                 }
+
 
                 return operatorNode; 
             }

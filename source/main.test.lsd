@@ -1,5 +1,4 @@
 echoln(2 + 2 * 2.0)
 echo((2 +  2) * 2)
-echo(2 + 2 + 2)
-echoln( 2)
-echoln(8 - 4 div 2)
+echoln("Print Name> ")
+echo(read)
