@@ -45,7 +45,15 @@ namespace Compiler.Syntaxer.Table
                     {
                         foreach (string lookAhead in closure.LookAheads)
                         {
-                            state.Actions.Add(lookAhead, new LRAction("r", closure.Rule.Index));
+                            if (!state.Actions.ContainsKey(lookAhead))
+                            {
+                                state.Actions.Add(lookAhead, new LRAction("r", closure.Rule.Index));
+                            }
+                            else
+                            {
+                                state.Actions[lookAhead] = new LRAction("r", closure.Rule.Index);
+                            }
+                            
                         }
                     }
                 }

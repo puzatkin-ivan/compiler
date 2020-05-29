@@ -21,15 +21,11 @@ namespace compiler.ILGenerator
             { AstTypeEnum.String, "ldstr {VALUE}"}
         };
 
-        public void Generate(TextWriter ilsourceFile, List<ASTree> trees)
+        public void Generate(TextWriter ilsourceFile, ASTree tree)
         {
             string result = GetHeaderConstructions();
 
-            string body = "";
-            foreach (var tree in trees)
-            {
-                body += GenerateIlFromAst(tree);
-            }
+            string body = GenerateIlFromAst(tree);
 
             ilsourceFile.WriteLine(result.Replace("{BODY}", body));
             ilsourceFile.Flush();

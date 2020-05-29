@@ -13,12 +13,7 @@ namespace Compiler.LexerAnalyzer
         public int LexemCount { get; private set; }
         private TextReader _textReader;
 
-        private List<List<Lexem>> _lexems = new List<List<Lexem>>();
-
-        public int LexemCountByPosition(int rowPosition)
-        {
-            return _lexems[rowPosition].Count;
-        }
+        private List<Lexem> _lexems = new List<Lexem>();
 
         public Lexer( TextReader textReader )
         {
@@ -28,9 +23,9 @@ namespace Compiler.LexerAnalyzer
             LexemCount = _lexems.Count;
         }
 
-        public Lexem NextLexem(int rowPosition, int tokenIndex)
+        public Lexem NextLexem(int tokenIndex)
         {
-            return _lexems[rowPosition][tokenIndex];
+            return _lexems[tokenIndex];
         }
 
         private void ReadAllLexemInQueue()
@@ -40,13 +35,12 @@ namespace Compiler.LexerAnalyzer
 
             while (line != null)
             {
-                var newLexemList = new List<Lexem>();
-                ProcessSourceLine(newLexemList, line, rowPosition);
+                ProcessSourceLine(_lexems, line, rowPosition);
                 rowPosition++;
                 line = _textReader.ReadLine();
-                AddTermInQueue(newLexemList, new Lexem("$", rowPosition));
-                _lexems.Add(newLexemList);
             }
+
+            AddTermInQueue(_lexems, new Lexem("$", rowPosition));
         }
 
         private void ProcessSourceLine(List<Lexem> lexemStack, string line, int rowPosition )

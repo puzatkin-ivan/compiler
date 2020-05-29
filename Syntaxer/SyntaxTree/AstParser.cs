@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using compiler.Syntaxer.ParsingStackItem;
+using Compiler.LexerAnalyzer.Enums;
 
 namespace compiler.Syntaxer.SyntaxTree
 {
@@ -101,7 +102,7 @@ namespace compiler.Syntaxer.SyntaxTree
                     {
                         operatorNodes.Add(newNode);
                     }
-                    else
+                    else if (newNode != null)
                     {
                         nodes.Add(newNode);
                     }
@@ -152,6 +153,11 @@ namespace compiler.Syntaxer.SyntaxTree
         private ASTree GenerateAstByLeaf(LexemParsingTree tree)
         {
             var lexem = tree.NonTerminal;
+
+            if (lexem.Type == TermType.InstructionEnd)
+            {
+                return null;
+            }
             return new ASTree(AstType.ConvertTermTypeToAstType(lexem.Type), lexem.Value);
         }
     }

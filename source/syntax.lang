@@ -1,0 +1,34 @@
+Program -> Operators
+BlockOperators -> { Operators }
+Operators -> Operator Operators
+Operators -> Operator
+Operator -> Expression ;
+Operator -> ConditionalExpression
+Expression -> E
+Expression -> Declaration
+Expression -> Assignment
+ConditionalExpression -> if BoolExpression BlockOperators else BlockOperators
+ConditionalExpression -> if BoolExpression BlockOperators
+BoolExpression -> BoolValue
+BoolValue -> true
+BoolValue -> false
+Declaration -> Type Assignment
+Assignment -> identifier = F
+Type -> string
+Type -> int
+Type -> float
+E -> read
+E -> echo F
+E -> echoln F
+E -> E + T
+E -> E - T
+E -> T
+T -> T * F
+T -> T div F
+T -> F
+F -> ( E )
+F -> - F
+F -> decimalwholenumber
+F -> decimalfixedpointnumber
+F -> string
+F -> identifier

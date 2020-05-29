@@ -19,38 +19,32 @@ namespace Compiler
 
         public static void Main(string[] args)
         {
-            
+            bool debug = args.Length == 1 && args[0] == "--debug";
+
             TextReader sourceCodeFile = new StreamReader(_sourceCodeFileName);
             Lexer lexer  = new Lexer(sourceCodeFile);
-            GrammarStream stream = new GrammarStream(new StreamReader("./source/syntax.test.lang"));
-            TextWriter writer = new StreamWriter(_outViewFileName);
 
-            bool debug = args.Length == 1 && args[0] == "--debug";
+            GrammarStream stream = new GrammarStream(new StreamReader("./source/syntax.lang"));
+            TextWriter writer = new StreamWriter(_outViewFileName);
             if (debug)
             {
                 PrintGrammarView(stream, writer);
             }
-
             SyntaxAnalyzer analyzer = new SyntaxAnalyzer(stream);
+            var tree = analyzer.Analyze(lexer, debug, writer);
 
-            List<ASTree> astTrees = new List<ASTree>();
-            for (int index = 0; index < lexer.LexemCount; ++index)
-            {
-               astTrees.Add(analyzer.Analyze(lexer, index, debug, writer));
-            }
 
-            if (debug)
+            return;
+            /* if (debug)
             {
                 writer.WriteLine("### Ast Tree");
-                foreach (var tree in astTrees)
-                {
-                    writer.WriteLine(tree.ToString());
-                }
+
+                writer.WriteLine(tree.ToString());
                 writer.Flush();
             }
 
             MSILGenerator generator = new MSILGenerator();
-            generator.Generate(new StreamWriter("./out/lsdlang.il"), astTrees);
+            generator.Generate(new StreamWriter("./out/lsdlang.il"), tree); */
 
         }
 
@@ -63,14 +57,15 @@ namespace Compiler
         private static void PrintGrammarView(GrammarStream istream, TextWriter stream)
         {
             Grammar grammar = new Grammar(istream.GetGrammarText());
-            LRClosureTable lRClosureTable = new LRClosureTable(grammar);
-            var lrTable = new LRTable(grammar, lRClosureTable);
             var grammarView = new GrammarView(grammar);
             grammarView.View(stream);
             stream.Flush();
+            LRClosureTable lRClosureTable = new LRClosureTable(grammar);
             var closureView = new ClosureTableView(lRClosureTable);
             closureView.View(stream);
             stream.Flush();
+
+            var lrTable = new LRTable(grammar, lRClosureTable);
             var lrTableView = new LRTableView(lrTable);
             lrTableView.View(stream);
             stream.Flush();

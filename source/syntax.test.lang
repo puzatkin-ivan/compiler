@@ -1,4 +1,11 @@
 E' -> E
+E -> if B Y
+E -> if B Y else Y
+B -> ( D )
+D -> bool
+Y -> { E }
+E -> R identifier = F
+E -> identifier = F
 E -> read
 E -> echo F
 E -> echoln F
@@ -13,4 +20,6 @@ F -> - F
 F -> decimalwholenumber
 F -> decimalfixedpointnumber
 F -> string
-
+R -> string
+R -> int
+R -> float

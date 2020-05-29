@@ -1,0 +1,15 @@
+echo("Hello, World!");
+echo("Print Your Name> ");
+string username = "read";
+echoln("Hello, " + username);
+if (username == "Ivan")
+{
+    echoln("You are my friend");
+}
+else
+{
+    echoln("You are my guest");
+}
+echoln("Please press to Enter");
+read;
+echoln("Goodbye!");

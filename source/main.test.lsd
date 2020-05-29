@@ -1,4 +1,8 @@
-echoln(2 + 2 * 2.0)
-echo((2 +  2) * 2)
-echoln("Print Name> ")
-echo(read)
+echoln(2 + 2 * 2.0);
+echo((2 +  2) * 2);
+echoln("Print Name> ");
+echo(read);
+if true
+{
+    echoln("Success");
+}

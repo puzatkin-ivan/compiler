@@ -27,7 +27,7 @@ namespace Compiler.Syntaxer
             _lrTable = new LRTable(_grammar, _lrClosureTable);
         }
 
-        public ASTree Analyze(Lexer lexer, int rowPosition, bool debug, TextWriter writer)
+        public ASTree Analyze(Lexer lexer, bool debug, TextWriter writer)
         {
             if (debug)
             {
@@ -36,7 +36,7 @@ namespace Compiler.Syntaxer
 
             List<Node> stack = new List<Node>() { new Node(0) };
             int tokenIndex = 0;
-            Node node = new Node(lexer.NextLexem(rowPosition, tokenIndex));
+            Node node = new Node(lexer.NextLexem(tokenIndex));
             var stateIndex = stack[ 2 * ((stack.Count - 1) >> 1)].Index;
             var state = _lrTable.States[stateIndex];
             var action = state.GetActionByNode(node);
@@ -44,7 +44,7 @@ namespace Compiler.Syntaxer
             int index = 1;
             if (debug)
             {
-                PrintStackTrace(writer, rowPosition, index, stack, action, lexer, tokenIndex);
+                PrintStackTrace(writer, index, stack, action, lexer, tokenIndex);
             }
             while (action != null && action.ToString() != "r0")
             {
@@ -72,18 +72,18 @@ namespace Compiler.Syntaxer
 
                 stateIndex = stack[ 2 * ((stack.Count - 1) >> 1)].Index;
                 state = _lrTable.States[stateIndex];
-                node = stack.Count % 2 == 0 ? stack[stack.Count - 1] : new Node(lexer.NextLexem(rowPosition, tokenIndex));
+                node = stack.Count % 2 == 0 ? stack[stack.Count - 1] : new Node(lexer.NextLexem(tokenIndex));
                 action = state.GetActionByNode(node);
 
                 ++index;
 
                 if (debug)
                 {
-                    PrintStackTrace(writer, rowPosition, index, stack, action, lexer, tokenIndex);
+                    PrintStackTrace(writer, index, stack, action, lexer, tokenIndex);
                 }
             }
 
-            return new AstParser().Parse(stack[1].NonTerminal);
+            return null;
         }
 
         private void PrintStackTraceHeader(TextWriter writer)
@@ -93,7 +93,7 @@ namespace Compiler.Syntaxer
             writer.WriteLine("| ----------- | ----------- | ----------- | ----------- |");
         }
 
-        private void PrintStackTrace(TextWriter writer, int rowPosition, int index, List<Node> stack, LRAction action, Lexer lexer, int tokenIndex)
+        private void PrintStackTrace(TextWriter writer, int index, List<Node> stack, LRAction action, Lexer lexer, int tokenIndex)
         {
             writer.Write("| " + index + " | ");
 
@@ -103,9 +103,9 @@ namespace Compiler.Syntaxer
             }
             writer.Write(" | ");
 
-            for (int i = tokenIndex; i < lexer.LexemCountByPosition(rowPosition); ++i)
+            for (int i = tokenIndex; i < lexer.LexemCount; ++i)
             {
-                writer.Write(lexer.NextLexem(rowPosition, i) + " ");
+                writer.Write(lexer.NextLexem(i) + " ");
             }
             writer.Write(" | ");
 
