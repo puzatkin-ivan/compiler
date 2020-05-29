@@ -9,12 +9,13 @@ using compiler.Syntaxer.ParsingStackItem;
 using compiler.Syntaxer.SyntaxTree;
 using compiler.ILGenerator;
 using System.Collections.Generic;
+using Compiler.LexerAnalyzer.Enums;
 
 namespace Compiler
 {
     class Program
     {
-        private static string _sourceCodeFileName = "./source/main.test.lsd";
+        private static string _sourceCodeFileName = "./source/main.lsd";
         private static string _outViewFileName = "./out/syntax_analyzer.md"; 
 
         public static void Main(string[] args)
@@ -22,8 +23,9 @@ namespace Compiler
             bool debug = args.Length == 1 && args[0] == "--debug";
 
             TextReader sourceCodeFile = new StreamReader(_sourceCodeFileName);
-            Lexer lexer  = new Lexer(sourceCodeFile);
 
+            Lexer lexer  = new Lexer(sourceCodeFile);
+            CheckFormatSourceFile(lexer);
             GrammarStream stream = new GrammarStream(new StreamReader("./source/syntax.lang"));
             TextWriter writer = new StreamWriter(_outViewFileName);
             if (debug)
@@ -70,6 +72,43 @@ namespace Compiler
             lrTableView.View(stream);
             stream.Flush();
 
+        }
+
+        private static void CheckFormatSourceFile(Lexer lexer)
+        {
+            string result = "";
+
+            var headerFile = new StreamReader("../ConsoleApp/Program.cs.dist");
+            while (headerFile.Peek() > -1)
+            {
+                result += headerFile.ReadLine() + "\n";
+            }
+
+            Dictionary<string, string> changeDict = new Dictionary<string, string>() {
+                { "echo", "Console.Write"},
+                { "echoln", "Console.WriteLine"},
+                { "read", "Console.ReadLine()"},
+            };
+            string body = "";
+            for (int index = 0; index < lexer.LexemCount; ++index)
+            {
+                var lexem = lexer.NextLexem(index);
+
+                if (!lexem.Type.Equals(TermType.Epsilon))
+                {
+                    body += changeDict.ContainsKey(lexem.Value) ? changeDict[lexem.Value] : lexem.Value;
+                    if (lexem.Type.Equals(TermType.InstructionEnd))
+                    {
+                        body += "\n";
+                    }
+                    body += " ";
+                }
+            }
+
+            TextWriter writer = new StreamWriter("../ConsoleApp/Program.cs");
+            writer.WriteLine(result.Replace("{BODY}", body));
+            writer.Flush();
+            writer.Close();
         }
     }
 }

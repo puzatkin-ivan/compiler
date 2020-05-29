@@ -1,8 +1,9 @@
-echo("Hello, World!");
-echo("Print Your Name> ");
-string username = "read";
-echoln("Hello, " + username);
-if (username == "Ivan")
+echoln("Hello, World!");
+echo("Your Name> ");
+string username = "da";
+echo("Hello, ");
+echoln(username);
+if (true)
 {
     echoln("You are my friend");
 }

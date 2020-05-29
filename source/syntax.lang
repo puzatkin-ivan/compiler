@@ -9,7 +9,7 @@ Expression -> Declaration
 Expression -> Assignment
 ConditionalExpression -> if BoolExpression BlockOperators else BlockOperators
 ConditionalExpression -> if BoolExpression BlockOperators
-BoolExpression -> BoolValue
+BoolExpression -> ( BoolValue )
 BoolValue -> true
 BoolValue -> false
 Declaration -> Type Assignment
