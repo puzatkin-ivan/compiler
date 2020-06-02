@@ -2,7 +2,7 @@
 
 # Build source code compiler
 
-dotnet run
+dotnet run >> /dev/null 2>&1  
 
 cd ../ConsoleApp
 

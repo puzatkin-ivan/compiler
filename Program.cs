@@ -88,6 +88,7 @@ namespace Compiler
                 { "echo", "Console.Write"},
                 { "echoln", "Console.WriteLine"},
                 { "read", "Console.ReadLine()"},
+                { "==", ".Equals({T})"}
             };
             string body = "";
             for (int index = 0; index < lexer.LexemCount; ++index)
@@ -96,12 +97,34 @@ namespace Compiler
 
                 if (!lexem.Type.Equals(TermType.Epsilon))
                 {
-                    body += changeDict.ContainsKey(lexem.Value) ? changeDict[lexem.Value] : lexem.Value;
+                    if (index >= 1 && lexer.NextLexem(index - 1).Type.Equals(TermType.Equal) && (lexem.Type.Equals(TermType.String) || lexem.Type.Equals(TermType.Identifier)))
+                    {
+                        body = body.Replace("{T}", lexem.Value);
+                    }
+                    else
+                    {
+
+                        string chLexem = changeDict.ContainsKey(lexem.Value) ? changeDict[lexem.Value] : lexem.Value;
+                        if (lexem.Value.Equals("==") && (!(lexer.NextLexem(index - 1).Type.Equals(TermType.String)) || !(lexer.NextLexem(index-1).Type.Equals(TermType.Identifier))))
+                        {
+                            body += chLexem;
+                        }
+                        else
+                        {
+                            body += changeDict.ContainsKey(lexem.Value) ? changeDict[lexem.Value] : lexem.Value;
+                        }
+                    }
+                       
+                    
+                    
                     if (lexem.Type.Equals(TermType.InstructionEnd))
                     {
                         body += "\n";
                     }
-                    body += " ";
+                    if (!lexer.NextLexem(index + 1).Type.Equals(TermType.Equal) || (!lexem.Type.Equals(TermType.String) && !lexem.Type.Equals(TermType.Identifier)))
+                    {
+                        body += " ";
+                    }
                 }
             }
 

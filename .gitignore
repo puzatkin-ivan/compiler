@@ -2,7 +2,7 @@ obj
 *.dll
 *.obj
 .idea
-bin
+
 example
 out
 *.log

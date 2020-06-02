@@ -71,7 +71,7 @@ namespace compiler.Syntaxer.ParsingStackItem
 
         public string ToString(string prefix)
         {
-            return prefix + "- '" + NonTerminal.Value + "'\n";
+            return prefix + "- '" + NonTerminal.ToString() + "'\n";
         }
     }
 }

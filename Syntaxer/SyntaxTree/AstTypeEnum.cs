@@ -13,5 +13,7 @@ namespace compiler.Syntaxer.SyntaxTree
         Division,
         Minis,
         String,
+        OpeningBrace,
+        ClosingBrace,
     }
 }

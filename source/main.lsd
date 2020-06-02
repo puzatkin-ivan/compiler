@@ -1,9 +1,9 @@
 echoln("Hello, World!");
 echo("Your Name> ");
-string username = "da";
+string username = read;
 echo("Hello, ");
 echoln(username);
-if (true)
+if (true && (false || true))
 {
     echoln("You are my friend");
 }
